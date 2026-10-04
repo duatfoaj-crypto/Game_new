@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xin chào — Game_new</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1e3a8a, #7c3aed);
+    color: #fff;
+    padding: 24px;
+  }
+  main {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 560px;
+    width: 100%;
+    text-align: center;
+    backdrop-filter: blur(6px);
+  }
+  h1 { font-size: 3rem; margin: 0 0 8px; }
+  p.sub { margin: 0 0 24px; opacity: .9; }
+  .game { background: rgba(0,0,0,.25); border-radius: 12px; padding: 20px; }
+  .game h2 { margin: 0 0 8px; font-size: 1.25rem; }
+  .game p { margin: 0 0 12px; opacity: .9; }
+  .row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  input[type="number"] {
+    font-size: 1.1rem; padding: 8px 12px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.4); width: 140px;
+    background: rgba(255,255,255,.15); color: #fff;
+  }
+  button {
+    font-size: 1.1rem; padding: 8px 20px; border-radius: 8px;
+    border: none; cursor: pointer; background: #fbbf24; color: #1f2937;
+    font-weight: 700;
+  }
+  button:hover { background: #f59e0b; }
+  #ketqua { min-height: 1.6em; margin-top: 12px; font-weight: 600; }
+  footer { margin-top: 20px; font-size: .85rem; opacity: .75; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Xin chào! 👋</h1>
+  <p class="sub">Chào mừng bạn đến với <strong>Game_new</strong>. Cùng chơi trò đoán số nhé!</p>
+  <section class="game" aria-label="Trò chơi đoán số">
+    <h2>🎮 Đoán số từ 1 đến 100</h2>
+    <p>Máy đã nghĩ ra một số bí mật. Bạn hãy đoán thử!</p>
+    <div class="row">
+      <input id="doan" type="number" min="1" max="100" value="50" aria-label="Số bạn đoán">
+      <button id="nutdoan" type="button" aria-label="Đoán số">Đoán</button>
+      <button id="nutmoi" type="button" aria-label="Ván mới">Ván mới</button>
+    </div>
+    <div id="ketqua" role="status">Bạn đã đoán 0 lần.</div>
+  </section>
+  <footer>Trang tĩnh — không cần máy chủ build.</footer>
+</main>
+<script>
+(function () {
+  var biMat = Math.floor(Math.random() * 100) + 1;
+  var soLan = 0;
+  var oNhap = document.getElementById('doan');
+  var ketQua = document.getElementById('ketqua');
+  function choiMoi() {
+    biMat = Math.floor(Math.random() * 100) + 1;
+    soLan = 0;
+    ketQua.textContent = 'Ván mới bắt đầu! Bạn đã đoán 0 lần.';
+    oNhap.value = '50';
+    oNhap.focus();
+  }
+  function doanSo() {
+    var v = parseInt(oNhap.value, 10);
+    if (isNaN(v) || v < 1 || v > 100) {
+      ketQua.textContent = 'Vui lòng nhập số từ 1 đến 100 nhé!';
+      return;
+    }
+    soLan += 1;
+    if (v === biMat) {
+      ketQua.textContent = '🎉 Chính xác! Số bí mật là ' + biMat + '. Bạn đoán đúng sau ' + soLan + ' lần.';
+    } else if (v < biMat) {
+      ketQua.textContent = 'Số ' + v + ' quá nhỏ. Đã đoán ' + soLan + ' lần — thử số lớn hơn!';
+    } else {
+      ketQua.textContent = 'Số ' + v + ' quá lớn. Đã đoán ' + soLan + ' lần — thử số nhỏ hơn!';
+    }
+  }
+  document.getElementById('nutdoan').addEventListener('click', doanSo);
+  document.getElementById('nutmoi').addEventListener('click', choiMoi);
+  oNhap.addEventListener('keydown', function (e) { if (e.key === 'Enter') doanSo(); });
+})();
+</script>
+</body>
+</html>
